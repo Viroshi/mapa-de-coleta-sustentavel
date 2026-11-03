@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userData() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data;
+    }
+
+    function authorized() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && (
+          userData().get('tipoUsuario', '') in ['administrador', 'empresa']
+          || userData().get('tipo_usuario', '') in ['administrador', 'empresa']
+        );
+    }
+
+    match /pontos_coleta/{pointId} {
+      allow read: if resource.data.status == 'validado' || authorized();
+      allow create, update, delete: if authorized();
+    }
+
+    match /sugestoes/{suggestionId} {
+      allow create: if request.resource.data.status == 'pendente';
+      allow read, update, delete: if authorized();
+    }
+
+    match /usuarios/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow write: if false;
+    }
+  }
+}

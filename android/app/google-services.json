@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "585178140468",
+    "firebase_url": "https://mapacs-bc8ec-default-rtdb.firebaseio.com",
+    "project_id": "mapacs-bc8ec",
+    "storage_bucket": "mapacs-bc8ec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585178140468:android:566f284c4971df1a8b1f61",
+        "android_client_info": {
+          "package_name": "com.example.mdlxe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3tNeSgJ4AdHyR71T3n0yajCoDklUvOPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
