@@ -57,9 +57,7 @@ class CollectionPointService {
         .where((ponto) => ponto.dentroDoEscopoDoTcc)
         .toList();
 
-    final futures = <Future<List<PlaceModel>>>[
-      _buscarPontosOpenStreetMap(),
-    ];
+    final futures = <Future<List<PlaceModel>>>[_buscarPontosOpenStreetMap()];
 
     if (_firebase.isConfigured) {
       futures.add(_firebase.listarPontosValidados());
@@ -67,15 +65,13 @@ class CollectionPointService {
 
     final resultados = await Future.wait(futures);
     final osm = resultados.first;
-    final firebase = resultados.length > 1 ? resultados[1] : const <PlaceModel>[];
+    final firebase = resultados.length > 1
+        ? resultados[1]
+        : const <PlaceModel>[];
 
     // A ordem define a prioridade em caso de duplicidade. Um ponto validado
     // no Firebase deve prevalecer sobre uma referência local/externa.
-    return _removerDuplicados([
-      ...firebase,
-      ...local,
-      ...osm,
-    ]);
+    return _removerDuplicados([...firebase, ...local, ...osm]);
   }
 
   Future<List<PlaceModel>> _buscarPontosOpenStreetMap() async {
@@ -88,7 +84,8 @@ class CollectionPointService {
       return List<PlaceModel>.from(cache);
     }
 
-    final query = '''
+    final query =
+        '''
 [out:json][timeout:25];
 area["name"="$cidade"]["boundary"="administrative"]->.searchArea;
 (
@@ -138,9 +135,9 @@ out center tags;
 ''';
 
     try {
-      final result = await _overpass.rawOverpassQL(query: query).timeout(
-            const Duration(seconds: 14),
-          );
+      final result = await _overpass
+          .rawOverpassQL(query: query)
+          .timeout(const Duration(seconds: 14));
 
       Map<String, dynamic>? data;
 
@@ -150,15 +147,22 @@ out center tags;
         data = Map<String, dynamic>.from(result);
       }
 
-      if (data == null || data['elements'] is! List) {
-        return cache == null ? const <PlaceModel>[] : List<PlaceModel>.from(cache);
+      final rawElements = data?['elements'];
+
+      if (rawElements is! List) {
+        return cache == null
+            ? const <PlaceModel>[]
+            : List<PlaceModel>.from(cache);
       }
 
-      final elements = List<Map<String, dynamic>>.from(data['elements']);
+      final elements = List<Map<String, dynamic>>.from(rawElements);
+
       final pontos = elements
-          .where((element) =>
-              (element['lat'] != null && element['lon'] != null) ||
-              element['center'] != null)
+          .where(
+            (element) =>
+                (element['lat'] != null && element['lon'] != null) ||
+                element['center'] != null,
+          )
           .map((element) {
             final copy = Map<String, dynamic>.from(element);
 
@@ -178,9 +182,13 @@ out center tags;
       _osmCacheAt = DateTime.now();
       return List<PlaceModel>.from(semDuplicados);
     } on TimeoutException {
-      return cache == null ? const <PlaceModel>[] : List<PlaceModel>.from(cache);
+      return cache == null
+          ? const <PlaceModel>[]
+          : List<PlaceModel>.from(cache);
     } catch (_) {
-      return cache == null ? const <PlaceModel>[] : List<PlaceModel>.from(cache);
+      return cache == null
+          ? const <PlaceModel>[]
+          : List<PlaceModel>.from(cache);
     }
   }
 
