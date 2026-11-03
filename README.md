@@ -2,6 +2,16 @@
 
 Aplicativo Flutter desenvolvido para o TCC **Mapa de Coleta Sustentável**, com foco em Teresina/PI.
 
+### Plataformas disponíveis
+
+A versão web permite acessar o aplicativo pelo navegador em computadores, tablets e smartphones, incluindo dispositivos iOS sem necessidade de instalação.
+- **Versão Web:** [Acessar o Mapa de Coleta Sustentável](https://viroshi.github.io/mapa-de-coleta-sustentavel/)
+
+Atualmente, a versão instalável está disponível exclusivamente para **Android**, por meio de um arquivo APK publicado na seção Releases do repositório.
+- **Versão Android:** [Baixar o aplicativo pela seção Releases](https://github.com/Viroshi/mapa-de-coleta-sustentavel/releases)
+
+Para instalar o aplicativo no Android, baixe o arquivo `.apk` da versão mais recente. Durante a instalação, o Google Play Protect poderá solicitar uma verificação de segurança, basta clicar em "verificar App" e após a validação do Google Play Protect poderá dar continuidade a instalação.
+
 ## Funcionalidades previstas no TCC
 
 O projeto implementa o fluxo definido no trabalho:
